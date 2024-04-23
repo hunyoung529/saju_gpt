@@ -6,7 +6,7 @@ export async function GET(req) {
   const matchData = await queryExecute(
     `SELECT * FROM b3o2.matchlist WHERE id='${id}' AND opntid='${opntid}' AND y_status='yes'`
   );
-
+  console.log(matchData);
   let data = {};
   if (matchData) {
     data = await queryExecute(`

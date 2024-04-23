@@ -44,7 +44,7 @@ function Join() {
 
     axios.post("/api/member", value);
     axios.post("/api/fortune", { id: value.id });
-    axios.post("/api/matchlist", { id: value.id });
+    axios.post("/api/matchlist", { id: value.id, date: value.date });
     nav.push("./login");
   };
 

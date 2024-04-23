@@ -41,6 +41,8 @@ function Footer() {
     fnav.push("../../pages/login");
   };
 
+  console.log(sessionId);
+
   return (
     <>
       <footer className={fixSt.foot}>

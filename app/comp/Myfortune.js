@@ -1,96 +1,110 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import styles from "../pages/myfortune/myfortune.module.scss";
-import { MyContext } from "../Context";
 
 const Myfortune = function () {
-  const { loginUser } = useContext(MyContext);
+  const [userId, setUserId] = useState([]);
+  const [answer, setAnswer] = useState();
   const [fortuneData, setFortuneData] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get("/api/member");
+      setUserId(response.data);
+    }
+
+    fetchData();
+  }, []);
+  const sessionId =
+    typeof window !== "undefined" ? window.sessionStorage.getItem("id") : null;
+
+  const loginUser = userId.find((member) => member.id === sessionId);
 
   useEffect(() => {
     if (!loginUser) return;
 
-    fetch(`/api/fortune?id=${loginUser.id}&type=fortuneCheck`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.fortune) {
-          setFortuneData(data[0]);
-        } else {
-          askGptFortune();
-        }
-      })
-      .catch((err) => console.error("Error fetching fortune:", err));
+    axios(`/api/gptapi?username=${JSON.stringify(loginUser)}`).then((res) => {
+      setAnswer(res.data);
+    });
   }, [loginUser]);
 
-  function askGptFortune() {
-    fetch("/api/gptapi", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        gender: loginUser.gender,
-        date: loginUser.date,
-        calendartype: loginUser.calendartype,
-        time: loginUser.time,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.fortune) {
-          updateFortune(data);
-        } else {
-          console.error("No fortune data received from GPT API");
-        }
-      })
-      .catch((err) => console.error("Error fetching new fortune data:", err));
-  }
-  function updateFortune(data) {
-    fetch(`/api/fortune/${loginUser.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        fortune: data.fortune,
-        myelement: data.myelement,
-        yourelement: data.yourelement,
-      }),
-    })
-      .then((response) => response.json())
-      .then((updatedData) => {
-        refreshFortune();
-        console.log("Fortune updated successfully", updatedData);
-      })
-      .catch((err) => console.error("Failed to update fortune:", err));
-  }
-  function refreshFortune() {
-    fetch(`/api/fortune?id=${loginUser.id}&type=fortuneCheck`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.length > 0) {
-          setFortuneData(data[0]);
-        }
-      })
-      .catch((err) => console.error("Error refetching updated fortune:", err));
-  }
+  useEffect(() => {
+    if (!loginUser) return;
 
+    async function fetchFortune() {
+      try {
+        const res = await axios.get(
+          `/api/fortune?id=${loginUser.id}&type=fortuneCheck`
+        );
+        setFortuneData(res.data[0]);
+      } catch (error) {
+        console.error("Error fetching fortune:", error);
+      }
+    }
+
+    fetchFortune();
+  }, [loginUser]);
+
+  useEffect(() => {
+    if (answer) {
+      async function updateFortune() {
+        if (!loginUser || !loginUser.id) return;
+        try {
+          const response = await axios.put("/api/fortune", {
+            id: loginUser.id,
+            fortune: answer.response1,
+            myelement: answer.response2,
+            yourelement: answer.response3,
+          });
+          console.log("Fortune updated:", response.data);
+        } catch (error) {
+          console.error("Error updating fortune:", error);
+        }
+      }
+      updateFortune();
+    }
+  }, [answer]);
+  console.log(answer);
   return (
     <div className={styles.myfortuneWrap}>
-      <img src="/imges/main_angel_cut.png" alt="Main Angel" />
+      <img src="../../imges/main_angel_cut.png" />
       <div className={styles.title}>당신의 운세</div>
-      {fortuneData ? (
+      {fortuneData && fortuneData?.fortune !== null ? (
         <div style={{ whiteSpace: "pre-line" }}>
-          <div className={styles.fortune}>{fortuneData.fortune}</div>
+          <div className={styles.fortune}>
+            <div
+              dangerouslySetInnerHTML={{
+                __html:
+                  fortuneData && fortuneData.fortune
+                    ? fortuneData.fortune.replaceAll(".", ".<br>")
+                    : "",
+              }}
+            ></div>
+          </div>
           <div className={styles.row}>
             <div>
               <p className={styles.eleTitle}>&lt; 나의 5행 &gt;</p>
-              <p className={styles.ele}>{fortuneData.myelement}</p>
+              <p className={styles.ele}>{fortuneData?.myelement}</p>
             </div>
             <div>
               <p className={styles.eleTitle}>&lt; 상대의 5행 &gt;</p>
-              <p className={styles.ele}>{fortuneData.yourelement}</p>
+              <p className={styles.ele}>{fortuneData?.yourelement}</p>
             </div>
           </div>
         </div>
       ) : (
-        <div>Loading fortune...</div>
+        answer && (
+          <div style={{ whiteSpace: "pre-line" }}>
+            <div className={styles.fortune}>
+              <p>{answer.response1}</p>
+            </div>
+            <div className={styles.row}>
+              <p className={styles.ele}>{answer.response2}</p>
+              <p className={styles.ele}>{answer.response3}</p>
+            </div>
+          </div>
+        )
       )}
     </div>
   );

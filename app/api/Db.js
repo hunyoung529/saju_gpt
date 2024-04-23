@@ -1,4 +1,5 @@
 var mysql = require("mysql");
+console.log("process.env.NEXT_PUBLIC_HOST : ", process.env.NEXT_PUBLIC_HOST);
 
 var connection = mysql.createConnection({
   host: process.env.NEXT_PUBLIC_HOST,
