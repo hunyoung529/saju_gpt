@@ -48,7 +48,6 @@ export async function GET(req) {
       "SELECT * from member where id=? AND password=?",
       [id, pw]
     );
-    console.log(data, "------------");
   } else {
     data = await queryExecute("SELECT * from member");
   }
