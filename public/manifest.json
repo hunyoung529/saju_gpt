@@ -1,0 +1,35 @@
+{
+  "name": "별별연인",
+  "short_name": "사주를 통한 내짝찾기",
+  "description": "Next PWA example using next-pwa",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "id": "/",
+  "scope": "/",
+  "start_url": "/",
+
+  "icons": [
+    {
+      "src": "/favicomatic/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicomatic/apple-touch-icon-57x57.png",
+      "sizes": "57x57",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicomatic/apple-touch-icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicomatic/favicon-196x196.png",
+      "sizes": "196x196",
+      "type": "image/png"
+    }
+  ]
+}

@@ -16,7 +16,6 @@ export async function PUT(req) {
   let data = [];
   if (type == "likeCheck") {
     const { peoplelike, num } = await req.json();
-    console.log(peoplelike, num, "---------------");
     data = await queryExecute(
       `UPDATE community SET peoplelike = ? WHERE num = ?`,
       [peoplelike, num]

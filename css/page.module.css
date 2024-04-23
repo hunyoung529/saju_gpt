@@ -1,0 +1,91 @@
+.head {
+  padding: 0 50px;
+}
+.head .h_line {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.foot {
+  position: fixed;
+  bottom: 0px;
+  padding: 0 53px;
+}
+.foot .f_line {
+  width: 100%;
+  margin-bottom: 35px;
+}
+.foot div .f_line2 {
+  width: 100%;
+  margin-bottom: 90px;
+}
+.foot div .f_link {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 10px 0px 5px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  background-color: #f8eed4;
+}
+.foot div .f_link .f_a {
+  text-align: start;
+  border: none;
+  /* padding: 10px; */
+  background: none;
+  /* border-radius: 10px; */
+  /* margin-right: 10px; */
+  margin-top: 15px;
+  text-align: center;
+}
+.foot div .f_link.active {
+  color: #f45852;
+}
+.foot div .f_link .out {
+  border: none;
+  background: none;
+  margin-top: 15px;
+}
+.foot div .f_link .column {
+  display: flex;
+  flex-direction: column;
+  width: 70px;
+  text-align: center;
+  margin: 0 7px;
+  align-items: center;
+}
+.foot div .f_link .column_matchlist,
+.foot div .f_link .column_myfortune,
+.foot div .f_link .column_picklist,
+.foot div .f_link .column_community {
+  display: flex;
+  flex-direction: column;
+  width: 70px;
+  margin: 0 7px;
+  text-align: center;
+  align-items: center;
+}
+.foot div .f_link .column_matchlist button,
+.foot div .f_link .column_myfortune button,
+.foot div .f_link .column_picklist button,
+.foot div .f_link .column_community button {
+  color: #f45852;
+}
+.foot div .f_link .column_matchlist .f_svg1 path,
+.foot div .f_link .column_myfortune .f_svg1 path,
+.foot div .f_link .column_picklist .f_svg1 path,
+.foot div .f_link .column_community .f_svg1 path {
+  stroke: #f45852;
+}
+.foot div .f_link .column_matchlist .f_svg2 path,
+.foot div .f_link .column_myfortune .f_svg2 path,
+.foot div .f_link .column_picklist .f_svg2 path,
+.foot div .f_link .column_community .f_svg2 path {
+  fill: #f45852;
+}
+.foot div .f_link .column_myfortune path:nth-child(2) {
+  fill: #f45852;
+}
